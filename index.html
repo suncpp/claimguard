@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClaimGuard · 证据链审计台</title>
+<meta name="description" content="把 AI 生成的报告贴进来，一键审计哪些结论在裸奔。结论不出具证据，不予放行。">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="6" y="6" width="52" height="52" rx="8" fill="none" stroke="%23b3271e" stroke-width="5"/><text x="32" y="45" font-size="34" text-anchor="middle" fill="%23b3271e" font-family="serif" font-weight="bold">查</text></svg>'>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="seal" aria-hidden="true">查</div>
+    <div class="masthead-text">
+      <h1>ClaimGuard<span class="cn">证据链审计台</span></h1>
+      <p class="tagline">结论不出具证据，不予放行。<span class="motto">问题先于数据，数据先于结论，结论只忠于数据。</span></p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="audit" role="tab">① 审计台</button>
+    <button class="tab" data-tab="contract" role="tab">② Task Contract</button>
+    <button class="tab" data-tab="checklist" role="tab">③ 交付自查</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ ① 审计台 ============ -->
+  <section id="panel-audit" class="panel active" role="tabpanel">
+    <div class="cols">
+      <div class="col input-col">
+        <div class="paper-card" id="input-card">
+          <h2>被审报告</h2>
+          <p class="hint">把 AI 给你的分析 / 汇报原样贴进来。它给你结论，我们管它要证据。</p>
+          <textarea id="report-input" spellcheck="false"
+            placeholder="粘贴 AI 生成的报告……（Ctrl + Enter 直接审计）"></textarea>
+          <div class="btn-row">
+            <button id="btn-example-bad" class="ghost-btn" type="button">示例 · 先画靶后射箭</button>
+            <button id="btn-example-good" class="ghost-btn" type="button">示例 · 证据链驱动</button>
+          </div>
+          <button id="btn-audit" class="primary-btn" type="button">开 始 审 计</button>
+        </div>
+        <div class="paper-card note-card">
+          <h3>审计规则（v1 纯前端启发式）</h3>
+          <ul class="rule-list">
+            <li><b>无源因果</b> —— 出现"根因 / 导致 / 因为"却拿不出数据来源</li>
+            <li><b>无源数字</b> —— "预计降低 60%" 这类数字没有出处与口径</li>
+            <li><b>拍板式断言</b> —— "显然 / 必然 / 毫无疑问" 替代了论证</li>
+            <li><b>未验证的状态声明</b> —— "已完成 / 已修复" 却没有验证输出</li>
+            <li><b>诚实披露</b> —— 主动写明数据缺口，属于加分项，不是减分项</li>
+          </ul>
+          <p class="hint small">规则引擎不联网、不上传、不调用任何模型；本工具只能产出 candidate 状态，verified 由你或验证方确认。</p>
+        </div>
+      </div>
+
+      <div class="col result-col">
+        <div id="verdict-bar" class="verdict-bar hidden"></div>
+        <div id="markup-card" class="paper-card hidden">
+          <h2>批注稿 <span id="case-no" class="case-no"></span></h2>
+          <div id="markup" class="markup"></div>
+        </div>
+        <div id="ledger-card" class="paper-card hidden">
+          <h2>结论台账</h2>
+          <div class="table-wrap"><table id="ledger"></table></div>
+        </div>
+        <div id="json-card" class="paper-card hidden">
+          <h2>结构化输出 <span class="sub">（与文章 schema 对齐 · candidate 状态）</span></h2>
+          <pre id="json-out"></pre>
+          <button id="btn-copy" class="ghost-btn" type="button">复制 JSON</button>
+        </div>
+        <div id="empty-state" class="paper-card empty">
+          <p>右侧还是空的。</p>
+          <p class="hint">贴一份报告 → 点「开始审计」→ 看哪些结论在裸奔。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ② Task Contract ============ -->
+  <section id="panel-contract" class="panel" role="tabpanel">
+    <div class="cols">
+      <div class="col">
+        <div class="paper-card">
+          <h2>先定问题，不定结论</h2>
+          <p class="hint">任何分析任务开工前，先把要回答什么写成合同。<b>这里定的是问题，不是答案。</b></p>
+          <label class="field">Intent · 要回答什么问题？读者是谁？读完做什么决策？
+            <textarea id="c-intent" rows="3" placeholder="定位 /orders 接口 P99 从 200ms 涨到 800ms 的主要贡献因素；读者是技术负责人，需决定是否今晚发布热修复"></textarea>
+          </label>
+          <label class="field">Acceptance · 结论的验收标准（每行一条）
+            <textarea id="c-acceptance" rows="3" placeholder="每个结论至少绑定 1 条可复核的数据来源
+区分 verified / inferred / gap
+数据不足时显式披露，不得用推测填补关键结论"></textarea>
+          </label>
+          <label class="field">Forbidden · 明确禁止的行为（每行一条）
+            <textarea id="c-forbidden" rows="2" placeholder="禁止输出无证据来源的因果论断
+禁止为了叙事完整性而虚构数据"></textarea>
+          </label>
+          <label class="field">Verify Commands · 可执行的验证动作（每行一条）
+            <textarea id="c-verify" rows="2" placeholder="查询 APM 最近 7 天 /orders 分位数曲线
+导出慢查询日志 Top 50"></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="paper-card">
+          <h2>Contract JSON <span class="sub">（可直接抄进 Agent 的 System Prompt）</span></h2>
+          <pre id="contract-out"></pre>
+          <button id="btn-copy-contract" class="ghost-btn" type="button">复制 Contract</button>
+        </div>
+        <div class="paper-card note-card">
+          <h3>用法</h3>
+          <ul class="rule-list">
+            <li>把 Contract 发给 Agent 并要求确认后，才允许拉数据</li>
+            <li>数据与预设叙事冲突时：<b>改叙事，禁止改数据</b></li>
+            <li>交付固定三段：<b>候选结论 + 证据链 + 剩余风险</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ③ 交付自查 ============ -->
+  <section id="panel-checklist" class="panel" role="tabpanel">
+    <div class="cols">
+      <div class="col single">
+        <div class="paper-card">
+          <h2>Confidence Gate · 发报告前过一遍</h2>
+          <div class="check-item"><input type="checkbox" id="ck1"><label for="ck1">开工时定的是<b>问题</b>，还是不知不觉写成了结论？</label></div>
+          <div class="check-item"><input type="checkbox" id="ck2"><label for="ck2">每条关键结论，都能指出<b>具体的数据来源</b>吗？</label></div>
+          <div class="check-item"><input type="checkbox" id="ck3"><label for="ck3">数据打脸预设故事时，改的是<b>故事</b>，还是数据？</label></div>
+          <div class="check-item"><input type="checkbox" id="ck4"><label for="ck4">所有数据缺口，都<b>明说了</b>吗？有没有被推测悄悄填上的？</label></div>
+          <div class="check-item"><input type="checkbox" id="ck5"><label for="ck5">"已完成"这三个字，是<b>验证过之后</b>说的，还是感觉上该说了？</label></div>
+          <div id="check-progress" class="check-progress">已确认 0 / 5</div>
+          <div id="check-stamp" class="stamp-row hidden"><span class="stamp green">可交付</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>ClaimGuard v1 · 纯前端 · 零依赖 · 数据不出浏览器</p>
+  <p class="credit">灵感来自掘金文章《别让 AI Agent 先画靶再射箭：一套「结论忠于数据」的证据链工作流》</p>
+</footer>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

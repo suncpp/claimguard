@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ClaimGuard 封面 1280x720</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --paper:#f4eee1; --card:#fffdf6; --ink:#211d16; --ink-soft:#6f6553;
+    --line:#e3d9c2; --red:#b3271e; --red-soft:rgba(179,39,30,.09); --green:#22633c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  }
+  html,body{width:1280px;height:720px;overflow:hidden}
+  body{
+    font-family:var(--serif);color:var(--ink);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 31px, rgba(120,100,60,.05) 31px 32px),
+      radial-gradient(900px 480px at 88% -12%, rgba(179,39,30,.07), transparent 60%),
+      radial-gradient(700px 420px at -8% 112%, rgba(31,78,107,.06), transparent 60%),
+      var(--paper);
+    display:flex;align-items:center;
+  }
+  .wrap{display:grid;grid-template-columns:56fr 44fr;gap:40px;padding:0 72px;width:100%;align-items:center}
+
+  /* 左栏 */
+  .brand{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  .brand .seal{
+    width:64px;height:64px;border:3px solid var(--red);border-radius:9px;
+    box-shadow:inset 0 0 0 2px var(--card),inset 0 0 0 4px var(--red);
+    display:grid;place-items:center;color:var(--red);font-size:34px;font-weight:800;
+    transform:rotate(-8deg);mix-blend-mode:multiply;
+  }
+  .brand .wordmark{font-size:30px;font-weight:900;letter-spacing:3px;color:var(--ink-soft)}
+  h1{font-size:64px;font-weight:900;letter-spacing:4px;line-height:1.22}
+  h1 .accent{color:var(--red)}
+  .tagline{margin-top:16px;font-size:20px;color:var(--ink-soft);letter-spacing:2px}
+  .flow{margin-top:34px;display:flex;gap:0;align-items:center}
+  .step{
+    background:var(--card);border:1px solid var(--line);
+    box-shadow:0 10px 24px -16px rgba(60,45,20,.4);
+    padding:14px 22px;font-size:17px;font-weight:700;letter-spacing:2px;
+  }
+  .step small{display:block;font-size:11.5px;font-weight:400;color:var(--ink-soft);letter-spacing:1px;margin-top:2px}
+  .arrow{color:var(--red);font-size:22px;padding:0 12px;font-weight:900}
+  .foot{margin-top:44px;font-size:14px;color:var(--ink-soft);letter-spacing:2px}
+  .foot b{color:var(--red)}
+
+  /* 右栏：批注稿卡片 */
+  .doc{
+    position:relative;background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:0 30px 60px -30px rgba(60,45,20,.5);
+    padding:34px 36px 46px;transform:rotate(1.6deg);
+  }
+  .doc .doc-title{font-size:17px;font-weight:800;letter-spacing:2px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px;color:var(--ink)}
+  .doc p{font-size:16.5px;line-height:2.15;white-space:pre-wrap}
+  .bare{
+    background:var(--red-soft);border-radius:2px;padding:0 2px;
+    text-decoration:underline wavy var(--red) 2px;text-underline-offset:5px;
+  }
+  .bare .mini{
+    display:inline-block;font-size:10.5px;font-weight:700;color:var(--red);
+    border:1.5px solid var(--red);border-radius:3px;padding:0 5px;margin-left:4px;
+    transform:translateY(-5px) rotate(-5deg);letter-spacing:2px;
+  }
+  .ok{
+    background:rgba(34,99,60,.1);border-radius:2px;
+    text-decoration:underline solid var(--green) 2px;text-underline-offset:5px;
+  }
+  .stamp{
+    position:absolute;right:26px;bottom:88px;
+    border:5px double var(--red);border-radius:10px;
+    color:var(--red);font-size:30px;font-weight:900;letter-spacing:7px;text-indent:7px;
+    padding:10px 20px;transform:rotate(-9deg);
+    mix-blend-mode:multiply;opacity:.94;
+  }
+  .stamp small{display:block;font-size:10px;font-weight:400;letter-spacing:3px;text-align:center;text-indent:3px;margin-top:2px}
+  .grain{position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(140% 120% at 50% 40%, transparent 62%, rgba(88,64,28,.10) 100%)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="left">
+      <div class="brand">
+        <div class="seal">查</div>
+        <div class="wordmark">ClaimGuard</div>
+      </div>
+      <h1>结论不出具证据<br><span class="accent">不予放行。</span></h1>
+      <p class="tagline">AI 给你结论，我们管它要证据 —— 证据链审计台</p>
+      <div class="flow">
+        <div class="step">① 定问题<small>不是定结论</small></div>
+        <div class="arrow">→</div>
+        <div class="step">② 拉数据<small>缺口要披露</small></div>
+        <div class="arrow">→</div>
+        <div class="step">③ 出结论<small>绑定证据链</small></div>
+      </div>
+      <p class="foot">纯前端 · 零依赖 · <b>结论只忠于数据</b></p>
+    </div>
+
+    <div class="right">
+      <div class="doc">
+        <div class="doc-title">根因分析报告 · 批注稿</div>
+        <p><span class="bare">接口劣化的根因是数据库慢查询。<span class="mini">裸奔</span></span>
+建议增加索引，预计降低 <span class="bare">60%<span class="mini">无源数字</span></span>。
+整体性能显然已彻底解决<span class="bare">，无需排查<span class="mini">拍板式断言</span></span>。
+<span class="ok">GC 数据未采集，无法排除，待复核。</span></p>
+        <div class="stamp">不予放行<small>CLAIMGUARD AUDIT</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="grain"></div>
+</body>
+</html>
