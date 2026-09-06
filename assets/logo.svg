@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- ClaimGuard · 审计印章 Logo -->
+  <defs>
+    <radialGradient id="paper" cx="42%" cy="36%" r="85%">
+      <stop offset="0%" stop-color="#fffdf6"/>
+      <stop offset="70%" stop-color="#f6f0e2"/>
+      <stop offset="100%" stop-color="#ece2cc"/>
+    </radialGradient>
+    <radialGradient id="sealRed" cx="38%" cy="30%" r="90%">
+      <stop offset="0%" stop-color="#c93a2e"/>
+      <stop offset="100%" stop-color="#a32218"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 纸底 -->
+  <rect width="512" height="512" rx="96" fill="url(#paper)"/>
+  <rect width="512" height="512" rx="96" fill="none" stroke="#e0d5ba" stroke-width="2"/>
+
+  <!-- 印章外框（双层） -->
+  <rect x="76" y="76" width="360" height="360" rx="34" fill="none" stroke="url(#sealRed)" stroke-width="20"/>
+  <rect x="104" y="104" width="304" height="304" rx="24" fill="none" stroke="url(#sealRed)" stroke-width="4"/>
+
+  <!-- 中心"查"字 -->
+  <text x="256" y="352" text-anchor="middle" font-family="'Noto Serif SC','Source Han Serif SC','Songti SC','STSong','SimSun',serif"
+        font-size="212" font-weight="900" fill="url(#sealRed)">查</text>
+
+  <!-- 印泥质感（细小留白斑点） -->
+  <g fill="#fffdf6" opacity="0.5">
+    <circle cx="150" cy="130" r="3"/>
+    <circle cx="352" cy="112" r="2.4"/>
+    <circle cx="396" cy="330" r="2.8"/>
+    <circle cx="128" cy="356" r="2.2"/>
+    <circle cx="256" cy="120" r="2"/>
+    <circle cx="212" cy="416" r="2.6"/>
+  </g>
+</svg>
